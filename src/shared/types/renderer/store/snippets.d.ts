@@ -11,11 +11,15 @@ export interface State {
   selectedMultiple: Snippet[]
   fragment: number
   searchQuery?: string
+  searchQueryEscaped?: string
   sort: SnippetsSort
   hideSubfolderSnippets: boolean
   compactMode: boolean
   isContextState: boolean
   isMarkdownPreview: boolean
+  isMindmapPreview: boolean
   isScreenshotPreview: boolean
   isCodePreview: boolean
 }
+
+export type PreviewType = 'markdown' | 'mindmap' | 'screenshot' | 'code'

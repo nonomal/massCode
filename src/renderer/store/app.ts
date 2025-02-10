@@ -48,6 +48,7 @@ export const useAppStore = defineStore('app', {
     isSponsored: import.meta.env.VITE_SPONSORED === 'true',
     theme: 'light:github',
     showTags: true,
+    showModal: false,
     sizes: {
       titlebar: 15,
       sidebar: 180,
@@ -66,6 +67,7 @@ export const useAppStore = defineStore('app', {
     codePreview: CODE_PREVIEW_DEFAULTS,
     markdown: MARKDOWN_DEFAULTS,
     selectedPreferencesMenu: 'storage',
+    selectedDevtoolsMenu: 'textTools.caseConverter',
     language: store.preferences.get('language'),
     history: [],
     historyIndex: 0,

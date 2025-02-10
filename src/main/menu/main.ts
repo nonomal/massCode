@@ -29,7 +29,7 @@ const aboutApp = () => {
 }
 
 const appMenuCommon: Record<
-'preferences' | 'quit' | 'update',
+'preferences' | 'quit' | 'update' | 'devtools',
 MenuItemConstructorOptions
 > = {
   preferences: {
@@ -39,6 +39,13 @@ MenuItemConstructorOptions
       BrowserWindow.getFocusedWindow()?.webContents.send(
         'main-menu:preferences'
       )
+    }
+  },
+  devtools: {
+    label: i18n.t('menu:devtools.label') + '...',
+    accelerator: 'CommandOrControl+.',
+    click: () => {
+      BrowserWindow.getFocusedWindow()?.webContents.send('main-menu:devtools')
     }
   },
   update: {
@@ -97,6 +104,12 @@ const appMenuMac: MenuItemConstructorOptions[] = [
     type: 'separator'
   },
   {
+    ...appMenuCommon.devtools
+  },
+  {
+    type: 'separator'
+  },
+  {
     label: i18n.t('menu:app.hide'),
     role: 'hide'
   },
@@ -117,8 +130,11 @@ const appMenuMac: MenuItemConstructorOptions[] = [
 ]
 
 const appMenu: MenuItemConstructorOptions[] = [
-  { ...appMenuCommon.preferences },
   { ...appMenuCommon.update },
+  { type: 'separator' },
+  { ...appMenuCommon.preferences },
+  { ...appMenuCommon.devtools },
+  { type: 'separator' },
   { ...appMenuCommon.quit }
 ]
 
@@ -427,6 +443,18 @@ const markdownMenu: MenuItemConstructorOptions[] = [
     }
   },
   {
+    label: i18n.t('menu:editor.previewMindmap'),
+    accelerator: 'Shift+CommandOrControl+I',
+    click: () => {
+      BrowserWindow.getFocusedWindow()?.webContents.send(
+        'main-menu:preview-mindmap'
+      )
+    }
+  },
+  {
+    type: 'separator'
+  },
+  {
     label: i18n.t('menu:markdown.presentationMode'),
     accelerator: 'Alt+CommandOrControl+P',
     click: () => {
@@ -491,6 +519,14 @@ const historyMenu: MenuItemConstructorOptions[] = [
   }
 ]
 
+const windowMenu: MenuItemConstructorOptions[] = [
+  {
+    label: i18n.t('menu:window.minimize'),
+    accelerator: 'CommandOrControl+M',
+    role: 'minimize'
+  }
+]
+
 const menuItems: MenuItemConstructorOptions[] = [
   {
     label: i18n.t('menu:app.label'),
@@ -519,6 +555,10 @@ const menuItems: MenuItemConstructorOptions[] = [
   {
     label: i18n.t('menu:history.label'),
     submenu: historyMenu
+  },
+  {
+    label: i18n.t('menu:window.label'),
+    submenu: windowMenu
   },
   {
     label: i18n.t('menu:help.label'),

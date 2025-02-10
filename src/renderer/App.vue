@@ -21,6 +21,10 @@
       {{ i18n.t('updateAvailable') }}
     </span>
   </div>
+  <!-- TODO: Подумать о дальнейшем управлении глобальным модальным окном -->
+  <AppModal v-model:show="appStore.showModal">
+    <AppFolderIcons />
+  </AppModal>
 </template>
 
 <script setup lang="ts">
@@ -137,11 +141,11 @@ watch(
 watch(
   () => [snippetStore.selectedId, snippetStore.fragment],
   () => {
-    if (
-      snippetStore.selected?.content[snippetStore.fragment].language !==
-      'markdown'
-    ) {
+    const lang = snippetStore.selected?.content[snippetStore.fragment]?.language
+
+    if (lang && lang !== 'markdown') {
       snippetStore.isMarkdownPreview = false
+      snippetStore.isMindmapPreview = false
     }
   }
 )
@@ -186,6 +190,10 @@ ipc.on('main-menu:preferences', () => {
   router.push('/preferences')
 })
 
+ipc.on('main-menu:devtools', () => {
+  router.push('/devtools')
+})
+
 ipc.on('main-menu:new-folder', async () => {
   await onAddNewFolder()
 })
@@ -200,7 +208,7 @@ ipc.on('main-menu:new-fragment', () => {
 
 ipc.on('main-menu:preview-markdown', async () => {
   if (snippetStore.currentLanguage === 'markdown') {
-    snippetStore.isMarkdownPreview = !snippetStore.isMarkdownPreview
+    snippetStore.togglePreview('markdown')
     track('snippets/markdown-preview')
   }
 })
@@ -211,7 +219,10 @@ ipc.on('main-menu:presentation-mode', async () => {
 })
 
 ipc.on('main-menu:preview-code', () => {
-  snippetStore.isCodePreview = !snippetStore.isCodePreview
+  snippetStore.togglePreview('code')
+})
+ipc.on('main-menu:preview-mindmap', () => {
+  snippetStore.togglePreview('mindmap')
 })
 
 ipc.on('main-menu:copy-snippet', () => {

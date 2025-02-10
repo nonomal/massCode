@@ -49,7 +49,9 @@
       "dateModified": "Data úpravy",
       "dateCreated": "Data vytvoření",
       "name": "Názvu"
-    }
+    },
+    "hideSubfolderSnippets": "Skrýt snippety podsložek",
+    "compactMode": "Kompaktní zobrazení"
   },
   "edit": {
     "label": "Upravit",
@@ -68,6 +70,7 @@
     "previewCode": "Náhled kódu",
     "previewScreenshot": "Náhled screenshotu",
     "previewMarkdown": "Náhled Markdownu",
+    "previewMindmap": "Náhled myšlenkové mapy",
     "fontSizeIncrease": "Zvětšit písmo",
     "fontSizeDecrease": "Zmenšit písmo",
     "fontSizeReset": "Obnovit velikost píma"
@@ -81,5 +84,8 @@
     "label": "Historie",
     "back": "Zpět",
     "forward": "Vpřed"
+  },
+  "devtools": {
+    "label": "Nástroje pro vývojáře"
   }
 }

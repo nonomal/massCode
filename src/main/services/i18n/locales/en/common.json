@@ -3,12 +3,22 @@
     "moveStorage": "Move Storage",
     "openStorage": "Open Storage",
     "newStorage": "New Storage",
+    "reloadStorage": "Reload Storage",
     "fromMassCodeV1": "From massCode v1.0",
     "fromSnippetsLab": "From SnippetsLab",
     "confirm": "Confirm",
     "cancel": "Cancel",
     "update": ["Go to GitHub", "OK"],
-    "ok": "OK"
+    "ok": "OK",
+    "clear": "Clear",
+    "copy": "Copy",
+    "sort": "Sort",
+    "revers": "Revers",
+    "generate": "Generate",
+    "saveAs": "Save as",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
+    "fit": "Fit"
   },
   "newFolder": "New Folder",
   "newSnippet": "New Snippet",
@@ -17,7 +27,6 @@
   "addToFavorites": "Add to Favorites",
   "addTag": "Add Tag",
   "exportToHtml": "Export to HTML",
-  "saveScreenshot": "Save Screenshot",
   "rename": "Rename",
   "duplicate": "Duplicate",
   "delete": "Delete",
@@ -60,5 +69,6 @@
   "collapse-all": "Collapse All",
   "expand-all": "Expand All",
   "restore": "Restore",
-  "copy-snippet-link": "Copy Snippet Link"
+  "copy-snippet-link": "Copy Snippet Link",
+  "set-custom-icon": "Set Custom Icon"
 }

@@ -22,6 +22,7 @@ type ContextMenuAction =
   | 'expand-all'
   | 'restore-from-trash'
   | 'copy-snippet-link'
+  | 'set-custom-icon'
   | 'none'
 
 export type ContextMenuType =
@@ -43,6 +44,7 @@ type MainMenuAction =
   | 'presentation-mode'
   | 'preview-code'
   | 'preview-markdown'
+  | 'preview-mindmap'
   | 'search'
   | 'sort-snippets'
   | 'hide-subfolder-snippets'
@@ -52,6 +54,7 @@ type MainMenuAction =
   | 'font-size-reset'
   | 'history-back'
   | 'history-forward'
+  | 'devtools'
 
 type MainAction =
   | 'restart'

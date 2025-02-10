@@ -18,9 +18,22 @@
         class="nested"
         :class="{ open: open }"
       />
-      <Component :is="icon || Folder" />
+      <Component
+        :is="icon || Folder"
+        v-if="!model?.icon"
+      />
+
+      <AppFolderIconsItem
+        v-else
+        class="folder"
+        :name="(model.icon as string)"
+      />
     </span>
-    <slot />
+    <div class="name">
+      <div>
+        <slot />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -43,6 +56,7 @@ import type { FolderTree } from '@shared/types/main/db'
 import { useSnippetStore } from '@/store/snippets'
 import { emitter } from '@/composable'
 import { onScrollToFolder } from './composable'
+import { useAppStore } from '@/store/app'
 
 interface Props {
   id?: string
@@ -63,6 +77,7 @@ const props = withDefaults(defineProps<Props>(), {
   open: false
 })
 
+const appStore = useAppStore()
 const folderStore = useFolderStore()
 const snippetStore = useSnippetStore()
 const tagStore = useTagStore()
@@ -80,6 +95,11 @@ const onClickContextMenu = async () => {
       type: 'folder',
       data: JSON.parse(JSON.stringify(props.model))
     })
+
+    if (action === 'set-custom-icon') {
+      appStore.showModal = true
+      folderStore.selectedContextId = props.model?.id
+    }
 
     if (action === 'new') {
       await folderStore.addNewFolder()
@@ -234,6 +254,7 @@ watch(
     margin-right: var(--spacing-xs);
     display: flex;
     align-items: center;
+    height: 1.2em;
     :deep(svg) {
       fill: var(--color-sidebar-icon);
     }
@@ -243,6 +264,18 @@ watch(
     left: 0;
     &.open {
       transform: rotate(90deg);
+    }
+  }
+  .name {
+    user-select: none;
+    display: table;
+    table-layout: fixed;
+    width: 90%;
+    overflow: hidden;
+    > div {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
     }
   }
 }

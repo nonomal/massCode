@@ -69,6 +69,8 @@
     "format": "Форматировать",
     "previewCode": "Просмотр результата HTML/CSS",
     "previewScreenshot": "Просмотр скриншота",
+    "previewMarkdown": "Просмотр Markdown",
+    "previewMindmap": "Просмотр Mindmap",
     "fontSizeIncrease": "Увеличить шрифт",
     "fontSizeDecrease": "Уменьшить шрифт",
     "fontSizeReset": "Сбросить размер шрифта"
@@ -82,5 +84,9 @@
     "label": "История",
     "back": "Назад",
     "forward": "Вперед"
+  },
+  "window": {
+    "label": "Окно",
+    "minimize": "Убрать в Dock"
   }
 }

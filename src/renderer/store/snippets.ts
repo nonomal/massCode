@@ -12,11 +12,12 @@ import { defineStore } from 'pinia'
 import { useFolderStore } from './folders'
 import type {
   SnippetWithFolder,
-  State
+  State,
+  PreviewType
 } from '@shared/types/renderer/store/snippets'
 import { useTagStore } from './tags'
 import { useAppStore } from './app'
-import { uniqBy } from 'lodash'
+import Fuse from 'fuse.js'
 
 export const useSnippetStore = defineStore('snippets', {
   state: (): State => ({
@@ -26,11 +27,13 @@ export const useSnippetStore = defineStore('snippets', {
     selectedMultiple: [],
     fragment: 0,
     searchQuery: undefined,
+    searchQueryEscaped: undefined,
     sort: 'updatedAt',
     hideSubfolderSnippets: false,
     compactMode: false,
     isContextState: false,
     isMarkdownPreview: false,
+    isMindmapPreview: false,
     isScreenshotPreview: false,
     isCodePreview: false
   }),
@@ -302,17 +305,33 @@ export const useSnippetStore = defineStore('snippets', {
       await this.deleteSnippetsByIds(ids)
     },
     search (query: string) {
-      const byName = this.all.filter(i =>
-        i.name.toLowerCase().includes(query.toLowerCase())
-      )
+      let q = query
+      let isExactSearch = false
 
-      const byContent = this.all.filter(i => {
-        return i.content.some(c =>
-          c.value.toLowerCase().includes(query.toLowerCase())
-        )
+      // обрезка кавычек для точного поиска
+      if (query.startsWith('"') && query.endsWith('"')) {
+        isExactSearch = true
+        q = query.slice(1, -1)
+      }
+
+      this.searchQueryEscaped = q
+
+      if (!q) {
+        this.setSnippetsByAlias('all')
+        this.searchQueryEscaped = undefined
+        return
+      }
+
+      const fuse = new Fuse(this.all, {
+        includeScore: true,
+        threshold: isExactSearch ? 0 : 0.4,
+        ignoreLocation: true,
+        keys: ['name', 'content.value', 'description']
       })
 
-      this.snippets = uniqBy([...byName, ...byContent], 'id')
+      const result = fuse.search(q)
+
+      this.snippets = result.map(i => i.item)
       this.selected = this.snippets[0]
     },
     setSort (sort: SnippetsSort) {
@@ -320,6 +339,34 @@ export const useSnippetStore = defineStore('snippets', {
       store.app.set('sort', sort)
 
       sortSnippetsBy(this.snippets, this.sort)
+    },
+    togglePreview (type: PreviewType) {
+      switch (type) {
+        case 'markdown':
+          this.isMarkdownPreview = !this.isMarkdownPreview
+          this.isMindmapPreview = false
+          this.isScreenshotPreview = false
+          this.isCodePreview = false
+          break
+        case 'mindmap':
+          this.isMarkdownPreview = false
+          this.isMindmapPreview = !this.isMindmapPreview
+          this.isScreenshotPreview = false
+          this.isCodePreview = false
+          break
+        case 'screenshot':
+          this.isMarkdownPreview = false
+          this.isMindmapPreview = false
+          this.isScreenshotPreview = !this.isScreenshotPreview
+          this.isCodePreview = false
+          break
+        case 'code':
+          this.isMarkdownPreview = false
+          this.isMindmapPreview = false
+          this.isScreenshotPreview = false
+          this.isCodePreview = !this.isCodePreview
+          break
+      }
     }
   }
 })
